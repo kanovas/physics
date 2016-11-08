@@ -5,6 +5,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.AnchorPane;
@@ -20,11 +21,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        StackPane page = FXMLLoader.load(Main.class.getResource("sample.fxml"));
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("sample.fxml"));
+        Parent page = loader.load();
+        Controller controller = loader.getController();
         Scene scene = new Scene(page, 420, 420);
         primaryStage.setTitle("Particles");
         primaryStage.setScene(scene);
         primaryStage.show();
+        controller.setStage(primaryStage);
     }
 
     public static void main(String[] args) {

@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,6 +32,7 @@ public class Controller implements Initializable {
     private TextField textField;
 
     private GraphicsContext gc;
+    private Stage stage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -41,28 +43,40 @@ public class Controller implements Initializable {
         anchorPane.widthProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
                 canvas.setWidth(newSceneWidth.doubleValue() - 40);
-                draw();
+                clear();
             }
         });
         anchorPane.heightProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
                 canvas.setHeight(newSceneHeight.doubleValue() - 60);
-                draw();
+                clear();
             }
         });
 
-        button.setOnAction(new EventHandler<ActionEvent>() {
+        EventHandler<ActionEvent> drawer = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                stage.setResizable(false);
+                clear();
+
                 gc.setFill(Color.BLACK);
                 Integer num = Integer.parseInt(textField.getCharacters().toString());
-                gc.fillText(""  + num, 20, 20);
+                gc.fillText("" + num, 20, 20);
+
+                stage.setResizable(true);
             }
-        });
+        };
+
+        button.setOnAction(drawer);
+
     }
 
-    public void draw() {
+    public void clear() {
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }
