@@ -10,7 +10,7 @@ class Particle {
     private double x;
     private double y;
 
-    Particle(int x, int y) {
+    Particle(double x, double y) {
         this.x = x;
         this.y = y;
     }

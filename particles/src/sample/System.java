@@ -21,6 +21,7 @@ class System {
     private int d;
     private Canvas canvas;
     private Random random;
+    private Integer num;
 
     System() {
         random = new Random();
@@ -34,18 +35,22 @@ class System {
         }
     }
     
-    public void start (int part_amount, Canvas canvas) {
+    public void start ( Canvas canvas) {
         this.canvas = canvas;
         d = (int)Math.min(canvas.getHeight(), canvas.getWidth());
 
-        PARTICLES_AMOUNT = part_amount;
         currentState = new ArrayList<>();
         initializeCurrentState();
 
         working = true;
-        while (working) {
+        //while (working) {
             getNextCondition();
-        }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        //}
     }
 
     private void getNextCondition() {
@@ -72,8 +77,8 @@ class System {
     }
 
     private Particle countParticle(Particle particle) {
+        return new Particle(particle.getX() + 2, particle.getY() + 2);
         //TODO : count Particle position according to subState and currentState
-        return particle;
     }
 
     private void setIsWorkingCondition() {
@@ -104,5 +109,9 @@ class System {
 
     boolean isWorking() {
         return working;
+    }
+
+    public void setNum(Integer num) {
+        this.PARTICLES_AMOUNT = num;
     }
 }
