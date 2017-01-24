@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 public class Controller implements Initializable {
 
@@ -33,6 +34,9 @@ public class Controller implements Initializable {
 
     private GraphicsContext gc;
     private Stage stage;
+    private System system;
+
+    private final int DEFAULT_PARTICLES_AMOUNT = 10;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -53,15 +57,26 @@ public class Controller implements Initializable {
             }
         });
 
+        system = new System();
+
         EventHandler<ActionEvent> drawer = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 stage.setResizable(false);
                 clear();
-
+                Integer num = DEFAULT_PARTICLES_AMOUNT;
+                try {
+                    num = Integer.parseInt(textField.getCharacters().toString());
+                } catch (Exception e) {
+                    e.getMessage();
+                }
+                system.start(num, canvas);
+/*
                 gc.setFill(Color.BLACK);
                 Integer num = Integer.parseInt(textField.getCharacters().toString());
                 gc.fillText("" + num, 20, 20);
+*/
+
 
                 stage.setResizable(true);
             }

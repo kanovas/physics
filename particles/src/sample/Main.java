@@ -24,22 +24,14 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("sample.fxml"));
         page = loader.load();
         Controller controller = loader.getController();
-        System system = new System(PARTICLES_AMOUNT);
         primaryStage.setResizable(false);
-        Scene scene;
-        while (system.isWorking()) {
-            scene = prepareScene(system.getNextCondition());
-            primaryStage.setTitle("Particles");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-            controller.setStage(primaryStage);
-        }
-        primaryStage.setResizable(true);
-    }
+        Scene scene = new Scene(page, 420, 420);
+        primaryStage.setTitle("Particles");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        controller.setStage(primaryStage);
 
-    private Scene prepareScene(ArrayList<Particle> particles) {
-        //TODO : prepare Scene according ot positions of Particles
-        return new Scene(page, 420, 420);
+        primaryStage.setResizable(true);
     }
 
     public static void main(String[] args) {
