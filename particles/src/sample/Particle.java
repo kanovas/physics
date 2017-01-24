@@ -9,6 +9,8 @@ import javafx.scene.paint.Color;
 class Particle {
     private double x;
     private double y;
+    private double beforeX;
+    private double beforeY;
 
     Particle(double x, double y) {
         this.x = x;
@@ -20,12 +22,28 @@ class Particle {
                        + Math.pow(this.y - target.y, 2));
     }
 
+    double getDistanceTo(double tx, double ty) {
+        return Math.sqrt(Math.pow(this.x - tx, 2)
+                + Math.pow(this.y - ty, 2));
+    }
+
+    public double delta() {
+        return getDistanceTo(beforeX, beforeY);
+    }
+
     public double getX() {
         return x;
     }
 
     public double getY() {
         return y;
+    }
+
+    public void setNewPosition(double x, double y) {
+        beforeX = this.x;
+        beforeY = this.y;
+        this.x = x;
+        this.y = y;
     }
 
     public void draw (GraphicsContext context) {
