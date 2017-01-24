@@ -15,7 +15,6 @@ class System {
     private static final double DELTA = 0.5;
     private static final Long TICK_TIME = 100L;
     private ArrayList<Particle> currentState;
-    private ArrayList<Particle> subState;
     private int PARTICLES_AMOUNT;
     private boolean working = false;
     private int d;
@@ -50,10 +49,7 @@ class System {
 
     private void getNextCondition() {
         Long startTime = getCurrentTime();
-        subState = currentState;
-        currentState = new ArrayList<>();
-        for (Particle p : subState)
-            currentState.add(countParticle(p));
+        currentState.forEach(this::countParticle);
         setIsWorkingCondition();
         correctTickTime(startTime);
         draw();
@@ -71,15 +67,15 @@ class System {
         }
     }
 
-    private Particle countParticle(Particle particle) {
-        //TODO : count Particle position according to subState and currentState
-        return particle;
+    private void countParticle(Particle particle) {
+        
+        particle.setNewPosition(particle.getX(), particle.getY());
     }
 
     private void setIsWorkingCondition() {
         working = false;
-        for (int i = 0; i < PARTICLES_AMOUNT; i++) {
-            if (subState.get(i).getDistanceTo(currentState.get(i)) > DELTA) {
+        for (Particle p : currentState) {
+            if (p.delta() > DELTA) {
                 working = true;
                 return;
             }
