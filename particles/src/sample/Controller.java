@@ -73,13 +73,14 @@ public class Controller implements Initializable {
                     e.getMessage();
                 }
                 system.setNum(num);
-                for (int i = 0; i < 1000; i++)
+                system.initializeCurrentState(canvas);
+                for (int i = 0; i < 1000000; i++)
                 new java.util.Timer().schedule(new java.util.TimerTask() {
                     @Override
                     public void run() {
-                        system.start(canvas);
+                            system.start(canvas);
                     }
-                }, 30 * i);
+                }, 20 * i);
 
 /*
                 gc.setFill(Color.BLACK);

@@ -11,6 +11,10 @@ class Particle {
     private double y;
     private double beforeX;
     private double beforeY;
+    private double speedX;
+    private double speedY;
+    private double beforeSpeedX;
+    private double beforeSpeedY;
 
     Particle(double x, double y) {
         this.x = x;
@@ -52,5 +56,23 @@ class Particle {
         context.setLineWidth(1);
         context.fillOval(x, y, 2, 2);
         context.strokeOval(x, y, 2, 2);
+    }
+
+    public double getSpeedY() {
+        return speedY;
+    }
+
+    public void setSpeedY(double speedY) {
+        beforeSpeedY = speedY;
+        this.speedY = speedY;
+    }
+
+    public double getSpeedX() {
+        return speedX;
+    }
+
+    public void setSpeedX(double speed) {
+        beforeSpeedX =speedX;
+        this.speedX = speed;
     }
 }
