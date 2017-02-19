@@ -88,10 +88,11 @@ class Particle {
         //x = x0 + v0*t + (F/m)*t^2/2
         double ax = forceX / MASS; // m/s
         double ay = forceY / MASS; // m/s
-        speedX = speedX + ax*timeStep;
-        speedY = speedY + ay*timeStep;
         double newX = x + speedX * timeStep + (ax * timeStep * timeStep/2) / real;
         double newY = y + speedY * timeStep + (ay * timeStep * timeStep/2) / real;
+
+        speedX = speedX + ax*timeStep;
+        speedY = speedY + ay*timeStep;
 
         setNewPosition(newX, newY);
     }
