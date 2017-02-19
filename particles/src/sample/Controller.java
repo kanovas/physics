@@ -16,9 +16,6 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.TimerTask;
-import java.util.concurrent.RunnableFuture;
-import java.util.logging.Logger;
 
 public class Controller implements Initializable {
 
@@ -72,15 +69,14 @@ public class Controller implements Initializable {
                 } catch (Exception e) {
                     e.getMessage();
                 }
-                system.setNum(num);
-                system.initializeCurrentState(canvas);
-                for (int i = 0; i < 1000000; i++)
+                system.start(canvas, num);
+                /*for (int i = 0; i < 100; i++)
                 new java.util.Timer().schedule(new java.util.TimerTask() {
                     @Override
                     public void run() {
                             system.start(canvas);
                     }
-                }, 20 * i);
+                }, 20 * i);*/
 
 /*
                 gc.setFill(Color.BLACK);

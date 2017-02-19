@@ -1,32 +1,30 @@
 package sample;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
 class System {
 
     private static final double DELTA = 0.5;
-    private static final Long TICK_TIME = 100L;
-    private static final Double GRAVITY = 6674286700000000D;
-    private static final Double MASS = 0.00000000000000000000091093835611D;
-    private static final Double Z = 1.6E-19;
-    private static final Double KULON = 8.85E-12;
+    private static final double GRAVITY = 6674286700000000D;
+    private static final double KULON = 8.85E-12;
+    private static final double timeStep = 0.05; //seconds
     private ArrayList<Particle> currentState;
     private int PARTICLES_AMOUNT;
-    Long time;
     private boolean working = false;
     private int d;
     private Canvas canvas;
     private Random random;
-    private Integer num;
-    Long currentTime = -1L;
 
     System() {
         random = new Random();
@@ -40,33 +38,29 @@ class System {
         for (int i = 0; i < PARTICLES_AMOUNT; i++) {
             int x = random.nextInt(d - 2) + 1;
             int y = d / 2 + ((x < d / 2) ? (random.nextInt(2 * x) - x) : (random.nextInt(2 * (d - x)) - d + x));
-            currentState.add(new Particle(x, y));
+            currentState.add(new Particle(x, y, timeStep, d));
         }
     }
 
-    public void start(Canvas canvas) {
-        //this.canvas = canvas;
-
+    public void start(Canvas canvas, int num) {
+        this.canvas = canvas;
+        PARTICLES_AMOUNT = num;
+        initializeCurrentState(canvas);
 
         working = true;
-        //while (working) {
-        getNextCondition();
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //}
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new java.util.TimerTask() {
+            @Override
+            public void run() {
+                if (!working) this.cancel();
+                Platform.runLater(System.this::getNextCondition);
+            }
+        }, 0, (long) (timeStep * 1000));
     }
 
     public void getNextCondition() {
-        Long startTime = getCurrentTime();
-        time = startTime - currentTime;
-        if (currentTime == -1) time = 1L;
-        currentTime = startTime;
         currentState.forEach(this::countParticle);
         setIsWorkingCondition();
-        correctTickTime(startTime);
         draw();
     }
 
@@ -84,7 +78,17 @@ class System {
 
 
     private void countParticle(Particle particle) {
-        double sumX = 0;
+        /*double cForceX = 0;
+        double cForceY = 0;
+        for (Particle p : currentState) {
+            cForceX += particle.getCoulombForceX(p);
+            cForceY += particle.getCoulombForceY(p);
+        }
+        particle.setNewPositionForces(cForceX, cForceY);*/
+
+        particle.setNewPosition(particle.getX() + random.nextInt(10) - 5, particle.getY() + random.nextInt(10) - 5);
+
+        /*double sumX = 0;
         double sumY = 0;
         for (Particle p1 : currentState) {
             double cos = 0;
@@ -138,7 +142,7 @@ class System {
                 particle.setSpeedY(- x * sin + y * cos);
                 particle.getSpeedX();
             }
-        }
+        }*/
     }
 
     private double sinForCos(double cos) {
@@ -151,16 +155,6 @@ class System {
 
     private double modul(double a, double b) {
         return Math.sqrt(a * a + b * b);
-    }
-
-    private double getKylonF(double x, double y, double x1, double y1) {
-        double dist = getDistance(x, y, x1, y1);
-        return KULON * Z * Z / (dist * dist);
-    }
-
-    private double getGravityF(double x, double y, double x1, double y1) {
-        double dist = getDistance(x, y, x1, y1);
-        return GRAVITY * MASS * MASS / (dist * dist);
     }
 
     private double getDistance(double x, double y, double x1, double y1) {
@@ -177,17 +171,6 @@ class System {
         }
     }
 
-    private void correctTickTime(Long startTime) {
-        Long workingTime = getCurrentTime() - startTime;
-        if (workingTime < TICK_TIME) {
-            try {
-                TimeUnit.SECONDS.sleep((TICK_TIME - workingTime) / 1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     private Long getCurrentTime() {
         Date date = new Date();
         return date.getTime();
@@ -197,7 +180,4 @@ class System {
         return working;
     }
 
-    public void setNum(Integer num) {
-        this.PARTICLES_AMOUNT = num;
-    }
 }
