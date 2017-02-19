@@ -19,7 +19,7 @@ class Particle {
     private static double K = 8.9875517873681764E9;
     private double speedX = 0; //points/sec
     private double speedY = 0; //points/sec
-    private static double timeStep;
+    private double timeStep;
     private int r;
 
     Particle(double x, double y, double timeStep, int d) {
@@ -76,8 +76,8 @@ class Particle {
         beforeY = this.y;
         this.x = newX;
         this.y = newY;
-        speedX = (x - beforeX) / timeStep;
-        speedY = (y - beforeY) / timeStep;
+        //speedX = (x - beforeX) / timeStep;
+        //speedY = (y - beforeY) / timeStep;
     }
 
     public void setNewPositionForces(double cForceX, double cForceY) {
@@ -88,6 +88,8 @@ class Particle {
         //x = x0 + v0*t + (F/m)*t^2/2
         double ax = forceX / MASS; // m/s
         double ay = forceY / MASS; // m/s
+        speedX = speedX + ax*timeStep;
+        speedY = speedY + ay*timeStep;
         double newX = x + speedX * timeStep + (ax * timeStep * timeStep/2) / real;
         double newY = y + speedY * timeStep + (ay * timeStep * timeStep/2) / real;
 

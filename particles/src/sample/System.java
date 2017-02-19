@@ -78,15 +78,15 @@ class System {
 
 
     private void countParticle(Particle particle) {
-        /*double cForceX = 0;
+        double cForceX = 0;
         double cForceY = 0;
         for (Particle p : currentState) {
             cForceX += particle.getCoulombForceX(p);
             cForceY += particle.getCoulombForceY(p);
         }
-        particle.setNewPositionForces(cForceX, cForceY);*/
+        particle.setNewPositionForces(cForceX, cForceY);
 
-        particle.setNewPosition(particle.getX() + random.nextInt(10) - 5, particle.getY() + random.nextInt(10) - 5);
+        //particle.setNewPosition(particle.getX() + random.nextInt(10) - 5, particle.getY() + random.nextInt(10) - 5);
 
         /*double sumX = 0;
         double sumY = 0;
